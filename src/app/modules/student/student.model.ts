@@ -27,7 +27,7 @@ const localGuardianSchema = new Schema({
 
 // Define the Student schema
 const studentSchema = new Schema<Student>({
-  id: { type: String, unique: true },
+  id: { type: String },
 
   name: userNameSchema,
   email: { type: String, required: true },
