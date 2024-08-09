@@ -1,5 +1,6 @@
 import { model, Schema } from 'mongoose'
 import { Student } from './student.interface'
+import validator from 'validator'
 
 // Define the UserName schema
 const userNameSchema = new Schema({
@@ -17,7 +18,15 @@ const userNameSchema = new Schema({
     },
   },
   middleName: { type: String, trim: true },
-  lastName: { type: String, required: [true, 'last name is required'] },
+  lastName: {
+    type: String,
+    required: [true, 'last name is required'],
+
+    validate: {
+      validator: (value: string) => validator.isAlpha(value),
+      message: 'value is not valid',
+    },
+  },
 })
 
 // Define the Guardian schema
