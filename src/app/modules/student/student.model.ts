@@ -46,7 +46,7 @@ const localGuardianSchema = new Schema({
 })
 
 // Define the Student schema
-const studentSchema = new Schema<TStudent, StudentModel>({
+const studentSchema = new Schema<TStudent>({
   id: {
     type: String,
     unique: true,
@@ -94,7 +94,3 @@ studentSchema.statics.isUserExists = async function (id: string) {
 }
 
 export const Student = model<TStudent, StudentModel>('Student', studentSchema)
-
-// schema.static('myStaticMethod', function myStaticMethod() {
-//   return 42;
-// });
