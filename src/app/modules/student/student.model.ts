@@ -1,6 +1,8 @@
 import { model, Schema } from 'mongoose'
 import { StudentModel, TStudent } from './student.interface'
 
+import bcrypt from 'bcrypt'
+import config from '../../config'
 // Define the UserName schema
 const userNameSchema = new Schema({
   firstName: {
@@ -52,6 +54,12 @@ const studentSchema = new Schema<TStudent>({
     unique: true,
     required: true,
   },
+  password: {
+    type: String,
+
+    required: [true, 'password is required'],
+    maxlength: [20, 'password can not be more than 20 character'],
+  },
 
   name: userNameSchema,
   email: {
@@ -92,5 +100,17 @@ studentSchema.statics.isUserExists = async function (id: string) {
   const existingUser = await Student.findOne({ id })
   return existingUser
 }
+
+studentSchema.pre('save', async function (next) {
+  // eslint-disable-next-line @typescript-eslint/no-this-alias
+  const user = this
+
+  user.password = await bcrypt.hash(
+    user.password,
+    Number(config.bcrypt_salt_rounds),
+  )
+
+  next()
+})
 
 export const Student = model<TStudent, StudentModel>('Student', studentSchema)
