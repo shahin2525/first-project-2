@@ -1,5 +1,5 @@
 import { model, Schema } from 'mongoose'
-import { Student } from './student.interface'
+import { StudentModel, TStudent } from './student.interface'
 
 // Define the UserName schema
 const userNameSchema = new Schema({
@@ -46,9 +46,11 @@ const localGuardianSchema = new Schema({
 })
 
 // Define the Student schema
-const studentSchema = new Schema<Student>({
+const studentSchema = new Schema<TStudent, StudentModel>({
   id: {
     type: String,
+    unique: true,
+    required: true,
   },
 
   name: userNameSchema,
@@ -78,7 +80,7 @@ const studentSchema = new Schema<Student>({
   },
   guardian: guardianSchema,
   localGuardian: localGuardianSchema,
-  profileImg: { type: String, required: true },
+  profileImg: { type: String },
   isActive: {
     type: String,
     enum: ['active', 'inActive'],
@@ -86,4 +88,13 @@ const studentSchema = new Schema<Student>({
   },
 })
 
-export const StudentModel = model<Student>('Student', studentSchema)
+studentSchema.statics.isUserExists = async function (id: string) {
+  const existingUser = await Student.findOne({ id })
+  return existingUser
+}
+
+export const Student = model<TStudent>('Student', studentSchema)
+
+// schema.static('myStaticMethod', function myStaticMethod() {
+//   return 42;
+// });
