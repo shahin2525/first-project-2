@@ -36,6 +36,7 @@ export type TStudent = {
   localGuardian: TLocalGuardian
   profileImg?: string
   isActive: 'active' | 'inActive'
+  isDeleted: boolean
 }
 export interface StudentModel extends Model<TStudent> {
   isUserExists(id: string): Promise<TStudent | null>

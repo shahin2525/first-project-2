@@ -48,54 +48,73 @@ const localGuardianSchema = new Schema({
 })
 
 // Define the Student schema
-const studentSchema = new Schema<TStudent>({
-  id: {
-    type: String,
-    unique: true,
-    required: true,
-  },
-  password: {
-    type: String,
+const studentSchema = new Schema<TStudent>(
+  {
+    id: {
+      type: String,
+      unique: true,
+      required: true,
+    },
+    password: {
+      type: String,
 
-    required: [true, 'password is required'],
-    maxlength: [20, 'password can not be more than 20 character'],
-  },
+      required: [true, 'password is required'],
+      maxlength: [20, 'password can not be more than 20 character'],
+    },
 
-  name: userNameSchema,
-  email: {
-    type: String,
-    required: [true, 'email is required'],
+    name: userNameSchema,
+    email: {
+      type: String,
+      required: [true, 'email is required'],
 
-    unique: true,
-    // validate: {
-    //   validator: (value) => validator.isEmail(value),
-    //   message: '{VALUE} is not valid email',
-    // },
+      unique: true,
+      // validate: {
+      //   validator: (value) => validator.isEmail(value),
+      //   message: '{VALUE} is not valid email',
+      // },
+    },
+    gender: {
+      type: String,
+      enum: ['male', 'female'],
+      required: true,
+    },
+    dateOfBirth: { type: String },
+    contactNumber: { type: String, required: true },
+    emergencyContact: { type: String, required: true },
+    presentAddress: { type: String, required: true },
+    permanentAddress: { type: String, required: true },
+    bloodGroup: {
+      type: String,
+      enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
+    },
+    guardian: guardianSchema,
+    localGuardian: localGuardianSchema,
+    profileImg: { type: String },
+    isActive: {
+      type: String,
+      enum: ['active', 'inActive'],
+      default: 'active',
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
   },
-  gender: {
-    type: String,
-    enum: ['male', 'female'],
-    required: true,
+  {
+    toJSON: {
+      virtuals: true,
+    },
   },
-  dateOfBirth: { type: String },
-  contactNumber: { type: String, required: true },
-  emergencyContact: { type: String, required: true },
-  presentAddress: { type: String, required: true },
-  permanentAddress: { type: String, required: true },
-  bloodGroup: {
-    type: String,
-    enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
-  },
-  guardian: guardianSchema,
-  localGuardian: localGuardianSchema,
-  profileImg: { type: String },
-  isActive: {
-    type: String,
-    enum: ['active', 'inActive'],
-    default: 'active',
-  },
+)
+
+// mongoose virtual
+
+const virtual = studentSchema.virtual('fullName')
+virtual.get(function () {
+  return `${this.name.firstName} ${this.name.middleName} ${this.name.lastName}`
 })
 
+// static method
 studentSchema.statics.isUserExists = async function (id: string) {
   const existingUser = await Student.findOne({ id })
   return existingUser
@@ -110,6 +129,30 @@ studentSchema.pre('save', async function (next) {
     Number(config.bcrypt_salt_rounds),
   )
 
+  next()
+})
+
+studentSchema.post('save', function (doc, next) {
+  doc.password = ''
+  next()
+})
+
+// query middleware
+
+studentSchema.pre('find', function (next) {
+  this.find({ isDeleted: { $ne: true } })
+  next()
+})
+
+studentSchema.pre('findOne', function (next) {
+  this.find({ isDeleted: { $ne: true } })
+  next()
+})
+
+// aggregate middleware
+
+studentSchema.pre('aggregate', function (next) {
+  this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } })
   next()
 })
 
