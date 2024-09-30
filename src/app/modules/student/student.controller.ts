@@ -1,31 +1,31 @@
 import { Request, Response } from 'express'
 import { StudentService } from './student.service'
-import studentZodValidationSchema from './student.zod.validation'
+// import studentZodValidationSchema from './student.zod.validation'
 
 // import studentJoyValidationSchema from './student.joy.validation'
 
-const createStudent = async (req: Request, res: Response) => {
-  try {
-    const { student: studentData } = req.body
-    // const { error } = studentJoyValidationSchema.validate(studentData)
+// const createStudent = async (req: Request, res: Response) => {
+//   try {
+//     const { student: studentData } = req.body
+//     // const { error } = studentJoyValidationSchema.validate(studentData)
 
-    const zodValidationData = studentZodValidationSchema.parse(studentData)
+//     const zodValidationData = studentZodValidationSchema.parse(studentData)
 
-    const result = await StudentService.createStudentIntoDB(zodValidationData)
+//     const result = await StudentService.createStudentIntoDB(zodValidationData)
 
-    res.status(200).json({
-      success: true,
-      message: 'create student successfully',
-      data: result,
-    })
-  } catch (err: any) {
-    res.status(500).json({
-      success: false,
-      message: err.message || 'something went wrong ',
-      error: err,
-    })
-  }
-}
+//     res.status(200).json({
+//       success: true,
+//       message: 'create student successfully',
+//       data: result,
+//     })
+//   } catch (err: any) {
+//     res.status(500).json({
+//       success: false,
+//       message: err.message || 'something went wrong ',
+//       error: err,
+//     })
+//   }
+// }
 // get all student
 const getAllStudents = async (req: Request, res: Response) => {
   try {
@@ -81,7 +81,6 @@ const deleteSingleStudent = async (req: Request, res: Response) => {
 }
 
 export const StudentController = {
-  createStudent,
   getAllStudents,
   getSingleStudent,
   deleteSingleStudent,
