@@ -1,4 +1,4 @@
-import { Model } from 'mongoose'
+import { Model, Types } from 'mongoose'
 
 export type TUserName = {
   firstName: string
@@ -20,6 +20,7 @@ export type TLocalGuardian = {
 }
 export type TStudent = {
   id: string
+  user: Types.ObjectId
   password: string
   name: TUserName
   email: string
@@ -35,7 +36,7 @@ export type TStudent = {
   guardian: Guardian
   localGuardian: TLocalGuardian
   profileImg?: string
-  isActive: 'active' | 'inActive'
+
   isDeleted: boolean
 }
 export interface StudentModel extends Model<TStudent> {

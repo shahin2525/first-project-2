@@ -4,12 +4,12 @@ import { UserServices } from './user.service'
 
 const createUser = async (req: Request, res: Response) => {
   try {
-    const studentData = req.body
+    const { password, studentData } = req.body
     // const userValidation = userValidationSchema.parse(userData)
-    const result = await UserServices.createUserIntoDB(studentData)
+    const result = await UserServices.createUserIntoDB(password, studentData)
     res.status(201).json({
       success: true,
-      message: 'user created successfully',
+      message: 'student created successfully',
       data: result,
     })
   } catch (err: any) {
