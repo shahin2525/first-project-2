@@ -1,6 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextFunction, Request, Response } from 'express'
 import { UserServices } from './user.service'
+import sendResponse from '../../utils/sendResponse'
+import httpStatus from 'http-status'
 
 const createUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -8,17 +9,13 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
     //   // const userValidation = userValidationSchema.parse(userData)
     const result = await UserServices.createUserIntoDB(password, studentData)
 
-    res.status(201).json({
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
       success: true,
       message: 'student created successfully',
       data: result,
     })
   } catch (err) {
-    // res.status(400).json({
-    //   success: false,
-    //   message: 'something went wrong' || err.message,
-    //   error: err,
-    // })
     next(err)
   }
 }
