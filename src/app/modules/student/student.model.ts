@@ -1,8 +1,8 @@
 import { model, Schema } from 'mongoose'
 import { StudentModel, TStudent } from './student.interface'
 
-import bcrypt from 'bcrypt'
-import config from '../../config'
+// import bcrypt from 'bcrypt'
+// import config from '../../config'
 // Define the UserName schema
 const userNameSchema = new Schema({
   firstName: {
@@ -61,12 +61,6 @@ const studentSchema = new Schema<TStudent>(
       unique: true,
       ref: 'User',
     },
-    password: {
-      type: String,
-
-      required: [true, 'password is required'],
-      maxlength: [20, 'password can not be more than 20 character'],
-    },
 
     name: userNameSchema,
     email: {
@@ -122,22 +116,22 @@ studentSchema.statics.isUserExists = async function (id: string) {
   return existingUser
 }
 
-studentSchema.pre('save', async function (next) {
-  // eslint-disable-next-line @typescript-eslint/no-this-alias
-  const user = this
+// studentSchema.pre('save', async function (next) {
+//   // eslint-disable-next-line @typescript-eslint/no-this-alias
+//   const user = this
 
-  user.password = await bcrypt.hash(
-    user.password,
-    Number(config.bcrypt_salt_rounds),
-  )
+//   user.password = await bcrypt.hash(
+//     user.password,
+//     Number(config.bcrypt_salt_rounds),
+//   )
 
-  next()
-})
+//   next()
+// })
 
-studentSchema.post('save', function (doc, next) {
-  doc.password = ''
-  next()
-})
+// studentSchema.post('save', function (doc, next) {
+//   doc.password = ''
+//   next()
+// })
 
 // query middleware
 

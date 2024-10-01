@@ -1,4 +1,4 @@
-import { Request, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import { StudentService } from './student.service'
 // import studentZodValidationSchema from './student.zod.validation'
 
@@ -27,7 +27,11 @@ import { StudentService } from './student.service'
 //   }
 // }
 // get all student
-const getAllStudents = async (req: Request, res: Response) => {
+const getAllStudents = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const result = await StudentService.getAllStudentsFromDB()
     res.status(200).json({
@@ -36,15 +40,15 @@ const getAllStudents = async (req: Request, res: Response) => {
       data: result,
     })
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'something went wrong',
-      error: error,
-    })
+    next(error)
   }
 }
 // get single student
-const getSingleStudent = async (req: Request, res: Response) => {
+const getSingleStudent = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { studentId } = req.params
     const result = await StudentService.getSingleStudentFromDB(studentId)
@@ -54,15 +58,15 @@ const getSingleStudent = async (req: Request, res: Response) => {
       data: result,
     })
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'something went wrong',
-      error: error,
-    })
+    next(error)
   }
 }
 
-const deleteSingleStudent = async (req: Request, res: Response) => {
+const deleteSingleStudent = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { studentId } = req.params
     const result = await StudentService.deleteSingleStudentFromDB(studentId)
@@ -72,11 +76,7 @@ const deleteSingleStudent = async (req: Request, res: Response) => {
       data: result,
     })
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'something went wrong',
-      error: error,
-    })
+    next(error)
   }
 }
 
