@@ -40,29 +40,32 @@ const localGuardianSchema = z.object({
 })
 
 // Define the Student validation schema
-const studentZodValidationSchema = z.object({
-  id: z.string().nonempty('id is required'),
-  password: z.string().nonempty('id is required').max(20),
+const createStudentZodValidationSchema = z.object({
+  body: z.object({
+    password: z.string().nonempty('id is required').max(20),
 
-  name: userNameSchema,
-  email: z
-    .string()
-    .nonempty('Email is required')
-    .email('Email must be a valid email address'),
-  gender: z.enum(['male', 'female']),
-  dateOfBirth: z.string().optional(),
-  contactNumber: z.string().nonempty('Contact number is required'),
-  emergencyContact: z.string().nonempty('Emergency contact is required'),
-  presentAddress: z.string().nonempty('Present address is required'),
-  permanentAddress: z.string().nonempty('Permanent address is required'),
-  bloodGroup: z
-    .enum(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'])
-    .optional(),
-  guardian: guardianSchema,
-  localGuardian: localGuardianSchema,
-  profileImg: z.string().optional(),
-  isActive: z.enum(['active', 'inActive']).default('active'),
-  isDeleted: z.boolean(),
+    student: z.object({
+      name: userNameSchema,
+      email: z
+        .string()
+        .nonempty('Email is required')
+        .email('Email must be a valid email address'),
+      gender: z.enum(['male', 'female']),
+      dateOfBirth: z.string().optional(),
+      contactNumber: z.string().nonempty('Contact number is required'),
+      emergencyContact: z.string().nonempty('Emergency contact is required'),
+      presentAddress: z.string().nonempty('Present address is required'),
+      permanentAddress: z.string().nonempty('Permanent address is required'),
+      bloodGroup: z
+        .enum(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'])
+        .optional(),
+      guardian: guardianSchema,
+      localGuardian: localGuardianSchema,
+      profileImg: z.string().optional(),
+    }),
+  }),
 })
 
-export default studentZodValidationSchema
+export const studentValidations = {
+  createStudentZodValidationSchema,
+}

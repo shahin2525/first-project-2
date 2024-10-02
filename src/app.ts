@@ -1,7 +1,7 @@
 import express, { Application, Request, Response } from 'express'
 import cors from 'cors'
 // import { StudentRoute } from './app/modules/student/student.route'
-import { UserRouter } from './app/modules/user/user.route'
+// import { UserRouter } from './app/modules/user/user.route'
 import globalErrorHandler from './app/middleware/globalErrorHandler'
 import notFoundRoute from './app/middleware/notFoundRoute'
 import router from './app/routes'
