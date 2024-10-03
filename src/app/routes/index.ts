@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { StudentRoute } from '../modules/student/student.route'
 import { UserRouter } from '../modules/user/user.route'
+import { AcademicSemesterRoute } from '../modules/academicSemester/academicSemester.route'
 
 const router = Router()
 
@@ -13,7 +14,11 @@ const routesModule = [
     path: '/users',
     route: UserRouter,
   },
+  {
+    path: '/semesters',
+    route: AcademicSemesterRoute,
+  },
 ]
 routesModule.forEach((route) => router.use(route.path, route.route))
-//students/', StudentRoute
+
 export default router

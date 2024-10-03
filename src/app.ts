@@ -5,6 +5,7 @@ import cors from 'cors'
 import globalErrorHandler from './app/middleware/globalErrorHandler'
 import notFoundRoute from './app/middleware/notFoundRoute'
 import router from './app/routes'
+// import router from './app/routes'
 const app: Application = express()
 
 app.use(cors())
