@@ -1,3 +1,5 @@
+import { Model } from 'mongoose'
+
 export type TMonth =
   | 'January'
   | 'February'
@@ -23,4 +25,8 @@ export type TAcademicSemester = {
 }
 export type TAcademicSemesterNameCodeMapper = {
   [key: string]: string
+}
+export interface AcademicSemesterModel extends Model<TAcademicSemester> {
+  // eslint-disable-next-line no-unused-vars
+  isAcademicSemesterExists(_id: string): Promise<TAcademicSemester | null>
 }

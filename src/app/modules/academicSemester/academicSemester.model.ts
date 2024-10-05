@@ -1,12 +1,18 @@
 import { Schema, model } from 'mongoose'
-import { TAcademicSemester } from './academicSemester.interface'
+import {
+  AcademicSemesterModel,
+  TAcademicSemester,
+} from './academicSemester.interface'
 import {
   AcademicSemesterCode,
   AcademicSemesterName,
   Months,
 } from './academicSemester.constant'
 
-const academicSemesterSchema = new Schema<TAcademicSemester>({
+const academicSemesterSchema = new Schema<
+  TAcademicSemester,
+  AcademicSemesterModel
+>({
   name: {
     type: String,
     enum: AcademicSemesterName,
@@ -44,6 +50,16 @@ academicSemesterSchema.pre('save', async function (next) {
   next()
 })
 
-const AcademicSemester = model('AcademicSemester', academicSemesterSchema)
+academicSemesterSchema.statics.isAcademicSemesterExists = async function (
+  _id: string,
+) {
+  const isExists = await AcademicSemester.findOne({ _id })
+  return !isExists
+}
+
+const AcademicSemester = model<TAcademicSemester, AcademicSemesterModel>(
+  'AcademicSemester',
+  academicSemesterSchema,
+)
 
 export default AcademicSemester
