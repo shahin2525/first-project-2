@@ -42,7 +42,7 @@ const localGuardianSchema = z.object({
 // Define the Student validation schema
 const createStudentZodValidationSchema = z.object({
   body: z.object({
-    password: z.string().nonempty('id is required').max(20),
+    password: z.string().nonempty('password is required').max(20),
 
     student: z.object({
       name: userNameSchema,
