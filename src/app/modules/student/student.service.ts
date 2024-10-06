@@ -26,7 +26,7 @@ const getSingleStudentFromDB = async (id: string) => {
 }
 // delete single document
 const deleteSingleStudentFromDB = async (id: string) => {
-  const result = await Student.updateOne({ id }, { isDeleted: true })
+  const result = await Student.deleteOne({ id }, { isDeleted: true })
   return result
 }
 

@@ -21,10 +21,42 @@ const getSingleAcademicSemesterIntoDB = async (_id: string) => {
   const result = await AcademicSemester.findOne({ _id })
   return result
 }
-const updateAcademicSemesterIntoDB = async (id: string) => {
-  const result = await AcademicSemester.updateOne({ id })
+const updateAcademicSemesterIntoDB = async (
+  _id: string,
+  payload: Partial<TAcademicSemester>,
+) => {
+  if (await AcademicSemester.isAcademicSemesterExists(_id)) {
+    throw new Error('academic semester does not exists')
+  }
+
+  if (
+    payload.name &&
+    payload.code &&
+    academicSemesterNameCodeMapper[payload.name] !== payload.code
+  ) {
+    throw new Error('invalid code')
+  }
+
+  const result = await AcademicSemester.findOneAndUpdate(
+    { _id: _id },
+    { $set: payload },
+    { returnDocument: 'after' },
+  )
   return result
 }
+// const updateAcademicSemesterIntoDB = async (
+//   id: string,
+//   payload: Partial<TAcademicSemester>,
+// ) => {
+//   // if (await AcademicSemester.isAcademicSemesterExists(_id)) {
+//   //   throw new Error('academic semester does not exists')
+//   // }
+//   const result = await AcademicSemester.findOneAndUpdate({ _id: id }, payload, {
+//     new: true,
+//   })
+//   return result
+// }
+
 export const AcademicSemesterServices = {
   createAcademicSemesterIntoDB,
   getAllAcademicSemestersIntoDB,

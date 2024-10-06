@@ -12,32 +12,37 @@ import {
 const academicSemesterSchema = new Schema<
   TAcademicSemester,
   AcademicSemesterModel
->({
-  name: {
-    type: String,
-    enum: AcademicSemesterName,
-    required: true,
+>(
+  {
+    name: {
+      type: String,
+      enum: AcademicSemesterName,
+      required: true,
+    },
+    code: {
+      type: String,
+      enum: AcademicSemesterCode,
+      required: true,
+    },
+    year: {
+      type: String,
+      required: true,
+    },
+    startMonth: {
+      type: String,
+      enum: Months,
+      required: true,
+    },
+    endMonth: {
+      type: String,
+      enum: Months,
+      required: true,
+    },
   },
-  code: {
-    type: String,
-    enum: AcademicSemesterCode,
-    required: true,
+  {
+    timestamps: true,
   },
-  year: {
-    type: String,
-    required: true,
-  },
-  startMonth: {
-    type: String,
-    enum: Months,
-    required: true,
-  },
-  endMonth: {
-    type: String,
-    enum: Months,
-    required: true,
-  },
-})
+)
 
 academicSemesterSchema.pre('save', async function (next) {
   const isSemesterExists = await AcademicSemester.findOne({
