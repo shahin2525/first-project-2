@@ -26,6 +26,7 @@ const updateAcademicFaculty = async (
     payload,
     {
       new: true,
+      runValidators: true,
     },
   )
   return result

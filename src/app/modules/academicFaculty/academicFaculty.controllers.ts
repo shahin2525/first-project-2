@@ -41,24 +41,12 @@ const getSingleAcademicFaculty = catchAsync(async (req, res) => {
   })
 })
 
-// get single student
-// const getSingleStudent: RequestHandler = catchAsync(async (req, res) => {
-//   const { studentId } = req.params
-//   const result = await StudentService.getSingleStudentFromDB(studentId)
-//   sendResponse(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: 'single student retrieve successfully',
-//     data: result,
-//   })
-// })
-
 const updateAcademicFaculty = catchAsync(async (req, res) => {
   const { facultyId } = req.params
-  const data = req.body
+
   const result = await AcademicFacultyServices.updateAcademicFaculty(
     facultyId,
-    data,
+    req.body,
   )
   sendResponse(res, {
     statusCode: httpStatus.OK,
