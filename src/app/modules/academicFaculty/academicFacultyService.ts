@@ -15,20 +15,26 @@ const getSingleAcademicFacultyIntoDB = async (id: string) => {
   const result = await AcademicFaculty.findOne({ _id: id })
   return result
 }
-const updateAcademicFaculty = async (
+const updateAcademicFacultyIntoDB = async (
   id: string,
   payload: Partial<TAcademicFaculty>,
 ) => {
-  const result = await AcademicFaculty.updateOne(
-    {
-      _id: id,
-    },
-    payload,
-    {
-      new: true,
-      runValidators: true,
-    },
-  )
+  // const result = await AcademicFaculty.updateOne(
+  //   // {
+  //   //   _id: id,
+  //   // },
+  //   // payload,
+  //   // {
+  //   //   new: true,
+  //   //   runValidators: true,
+  //   // },
+  //   { _id: id },
+  //   { $set: payload },
+  //   { returnDocument: 'after' },
+  // )
+  const result = await AcademicFaculty.findOneAndUpdate({ _id: id }, payload, {
+    new: true,
+  })
   return result
 }
 
@@ -36,5 +42,5 @@ export const AcademicFacultyServices = {
   createAcademicFacultyIntoDB,
   getAllAcademicFacultyIntoDB,
   getSingleAcademicFacultyIntoDB,
-  updateAcademicFaculty,
+  updateAcademicFacultyIntoDB,
 }
