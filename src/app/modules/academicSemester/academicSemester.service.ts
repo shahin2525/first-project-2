@@ -1,3 +1,5 @@
+import httpStatus from 'http-status'
+import AppError from '../../errors/appError'
 import { academicSemesterNameCodeMapper } from './academicSemester.constant'
 import { TAcademicSemester } from './academicSemester.interface'
 import AcademicSemester from './academicSemester.model'
@@ -16,7 +18,10 @@ const getAllAcademicSemestersIntoDB = async () => {
 }
 const getSingleAcademicSemesterIntoDB = async (_id: string) => {
   if (await AcademicSemester.isAcademicSemesterExists(_id)) {
-    throw new Error('academic semester does not exists')
+    throw new AppError(
+      httpStatus.NOT_FOUND,
+      'academic semester does not exists',
+    )
   }
   const result = await AcademicSemester.findOne({ _id })
   return result

@@ -48,7 +48,7 @@ const localGuardianSchema = new Schema({
 })
 
 // Define the Student schema
-const studentSchema = new Schema<TStudent>(
+const studentSchema = new Schema<TStudent, StudentModel>(
   {
     id: {
       type: String,
@@ -123,6 +123,10 @@ studentSchema.statics.isUserExists = async function (id: string) {
   const existingUser = await Student.findOne({ id })
   return existingUser
 }
+studentSchema.statics.doesUserExists = async function (id: string) {
+  const doesUserExists = await Student.findOne({ id })
+  return !doesUserExists
+}
 
 // studentSchema.pre('save', async function (next) {
 //   // eslint-disable-next-line @typescript-eslint/no-this-alias
@@ -148,16 +152,35 @@ studentSchema.pre('find', function (next) {
   next()
 })
 
-studentSchema.pre('findOne', function (next) {
-  this.find({ isDeleted: { $ne: true } })
-  next()
-})
+// studentSchema.pre('findOne', function (next) {
+//   this.find({ isDeleted: { $ne: true } })
+//   next()
+// })
 
 // aggregate middleware
 
-studentSchema.pre('aggregate', function (next) {
-  this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } })
-  next()
-})
+// studentSchema.pre('aggregate', function (next) {
+//   this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } })
+//   next()
+// })
+
+// studentSchema.pre('findOne', async function (next) {
+//   const query = this.getQuery()
+//   const isExists = await Student.findOne({ query })
+//   if (!isExists) {
+//     throw new Error('user does not exists')
+//   }
+//   next()
+// })
+
+// studentSchema.pre('findOne', async function (next) {
+//   const query = this.getQuery()
+//   console.log(query)
+//   const isExists = await Student.findOne(query)
+//   if (!isExists) {
+//     throw new Error('user does not exists')
+//   }
+//   next()
+// })
 
 export const Student = model<TStudent, StudentModel>('Student', studentSchema)

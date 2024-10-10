@@ -42,6 +42,7 @@ export type TStudent = {
 }
 export interface StudentModel extends Model<TStudent> {
   isUserExists(id: string): Promise<TStudent | null>
+  doesUserExists(id: string): Promise<TStudent | null>
 }
 // export interface StudentModel extends Model {
 //   isUserExists(id: string): Promise<TStudent | null>
