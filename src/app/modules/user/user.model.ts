@@ -2,6 +2,8 @@ import mongoose, { Schema } from 'mongoose'
 import { TUser } from './user.interface'
 import { hash } from 'bcrypt'
 import config from '../../config'
+import AppError from '../../errors/appError'
+import httpStatus from 'http-status'
 
 const UserSchema = new Schema(
   {
@@ -41,6 +43,16 @@ UserSchema.post('save', function (doc, next) {
   doc.password = ''
   next()
 })
+
+UserSchema.pre('findOneAndUpdate', async function (next) {
+  const query = this.getQuery()
+  const user = await User.findOne(query)
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, 'id not found')
+  }
+  next()
+})
+
 const User = mongoose.model<TUser>('User', UserSchema)
 
 export default User
