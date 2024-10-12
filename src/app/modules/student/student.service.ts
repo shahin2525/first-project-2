@@ -3,6 +3,7 @@ import { Student } from './student.model'
 import AppError from '../../errors/appError'
 import User from '../user/user.model'
 import mongoose from 'mongoose'
+import { TStudent } from './student.interface'
 // import mongoose from 'mongoose'
 // import User from '../user/user.model'
 
@@ -43,6 +44,38 @@ const getSingleStudentFromDB = async (id: string) => {
         path: 'academicFaculty',
       },
     })
+  return result
+}
+const updateStudentFromDB = async (id: string, payload: Partial<TStudent>) => {
+  // const result = await Student.findOne({ id })
+  if (await Student.doesUserExists(id)) {
+    throw new AppError(httpStatus.NOT_FOUND, 'user does not exists')
+  }
+
+  const { name, guardian, localGuardian, ...remainingStudent } = payload
+  const modifiedData: Record<string, unknown> = { ...remainingStudent }
+
+  if (name && Object.keys(name).length) {
+    for (const [key, value] of Object.entries(name)) {
+      modifiedData[`name.${key}`] = value
+    }
+  }
+  if (guardian && Object.keys(guardian).length) {
+    for (const [key, value] of Object.entries(guardian)) {
+      modifiedData[`guardian.${key}`] = value
+    }
+  }
+  if (localGuardian && Object.keys(localGuardian).length) {
+    for (const [key, value] of Object.entries(localGuardian)) {
+      modifiedData[`localGuardian.${key}`] = value
+    }
+  }
+
+  const result = await Student.findOneAndUpdate({ id }, modifiedData, {
+    new: true,
+    runValidators: true,
+  })
+
   return result
 }
 // delete single document
@@ -87,4 +120,5 @@ export const StudentService = {
   getAllStudentsFromDB,
   getSingleStudentFromDB,
   deleteSingleStudentFromDB,
+  updateStudentFromDB,
 }
