@@ -1,11 +1,11 @@
 import mongoose, { Schema } from 'mongoose'
-import { TUser } from './user.interface'
+import { TUser, UserModel } from './user.interface'
 import { hash } from 'bcrypt'
 import config from '../../config'
-import AppError from '../../errors/appError'
-import httpStatus from 'http-status'
+// import AppError from '../../errors/appError'
+// import httpStatus from 'http-status'
 
-const UserSchema = new Schema(
+const UserSchema = new Schema<TUser, UserModel>(
   {
     id: { type: String, required: true, unique: true },
     password: { type: String, required: true },
@@ -43,16 +43,26 @@ UserSchema.post('save', function (doc, next) {
   doc.password = ''
   next()
 })
+//
+// UserSchema.pre('findOneAndUpdate', async function (next) {
+//   const query = this.getQuery()
+//   const user = await User.findOne(query)
+//   if (!user) {
+//     throw new AppError(httpStatus.NOT_FOUND, 'id not found')
+//   }
+//   next()
+// })
+//
+// UserSchema.statics.doesUserExists = async function (id: string) {
+//   const isUserExists = await User.findOne({ id })
+//   return !isUserExists
+// }
 
-UserSchema.pre('findOneAndUpdate', async function (next) {
-  const query = this.getQuery()
-  const user = await User.findOne(query)
-  if (!user) {
-    throw new AppError(httpStatus.NOT_FOUND, 'id not found')
-  }
-  next()
-})
+UserSchema.statics.doesUserExists = async function (id: string) {
+  const doesUserExists = await User.findOne({ id })
+  return !doesUserExists
+}
 
-const User = mongoose.model<TUser>('User', UserSchema)
+const User = mongoose.model<TUser, UserModel>('User', UserSchema)
 
 export default User

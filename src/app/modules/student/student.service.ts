@@ -1,8 +1,10 @@
 import httpStatus from 'http-status'
 import { Student } from './student.model'
 import AppError from '../../errors/appError'
-import mongoose from 'mongoose'
 import User from '../user/user.model'
+import mongoose from 'mongoose'
+// import mongoose from 'mongoose'
+// import User from '../user/user.model'
 
 // const createStudentIntoDB = async (studentData: TStudent) => {
 //   if (await Student.isUserExists(studentData.id)) {
@@ -46,11 +48,11 @@ const getSingleStudentFromDB = async (id: string) => {
 // delete single document
 const deleteSingleStudentFromDB = async (id: string) => {
   const session = await mongoose.startSession()
+  if (await Student.doesUserExists(id)) {
+    throw new AppError(httpStatus.NOT_FOUND, 'student id does not exists')
+  }
   try {
     session.startTransaction()
-    if (await Student.doesUserExists(id)) {
-      throw new AppError(httpStatus.NOT_FOUND, 'id does not exists')
-    }
 
     // first transaction
     const studentDelete = await Student.findOneAndUpdate(
@@ -63,6 +65,7 @@ const deleteSingleStudentFromDB = async (id: string) => {
     }
 
     // second transaction
+
     const userDelete = await User.findOneAndUpdate(
       { id },
       { isDeleted: true },
