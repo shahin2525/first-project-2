@@ -49,6 +49,7 @@ const createUserIntoDB = async (password: string, payload: TStudent) => {
   } catch (err) {
     await session.abortTransaction()
     await session.endSession()
+    throw new Error('user and student create transaction failed')
   }
 }
 export const UserServices = {
