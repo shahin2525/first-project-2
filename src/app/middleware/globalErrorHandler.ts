@@ -8,6 +8,8 @@ import zodErrorHandler from '../errors/zodErrorHandler'
 import { TErrorSources } from '../interface/error'
 
 import validationErrorHandler from '../errors/validationErrorHandler'
+import castErrorHandler from '../errors/castErrorHandler'
+import duplicateErrorHandler from '../errors/duplicateErrorHandler'
 
 const globalErrorHandler: ErrorRequestHandler = (
   error,
@@ -35,12 +37,22 @@ const globalErrorHandler: ErrorRequestHandler = (
     statusCode = simplifiedError.statusCode
     message = simplifiedError.message
     errorSources = simplifiedError.errorSources
+  } else if (error.name === 'CastError') {
+    const simplifiedError = castErrorHandler(error)
+    statusCode = simplifiedError.statusCode
+    message = simplifiedError.message
+    errorSources = simplifiedError.errorSources
+  } else if (error.errorResponse.code === 11000) {
+    const simplifiedError = duplicateErrorHandler(error)
+    statusCode = simplifiedError.statusCode
+    message = simplifiedError.message
+    errorSources = simplifiedError.errorSources
   }
 
   res.status(statusCode).json({
     success: false,
     message,
-    // amiError: error,
+    // error,
     errorSources,
     stack: config.NODE_ENV === 'development' ? error.stack : null,
   })

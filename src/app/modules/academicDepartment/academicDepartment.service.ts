@@ -1,3 +1,5 @@
+import httpStatus from 'http-status'
+import AppError from '../../errors/appError'
 import { TAcademicDepartment } from './academicDepartment.interface'
 import AcademicDepartment from './academicDepartment.model'
 
@@ -12,6 +14,10 @@ const getAllAcademicDepartmentIntoDB = async () => {
 }
 
 const getSingleAcademicDepartmentIntoDB = async (id: string) => {
+  if (await AcademicDepartment.doesUserExists(id)) {
+    throw new AppError(httpStatus.NOT_FOUND, 'user does not exists')
+  }
+
   const result = await AcademicDepartment.findOne({ _id: id }).populate(
     'academicFaculty',
   )
