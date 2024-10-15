@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from 'http-status'
 import { Student } from './student.model'
 import AppError from '../../errors/appError'
@@ -110,10 +111,10 @@ const deleteSingleStudentFromDB = async (id: string) => {
     await session.commitTransaction()
     await session.endSession()
     return studentDelete
-  } catch (err) {
+  } catch (err: any) {
     await session.abortTransaction()
     await session.endSession()
-    throw new Error('user and student delete transaction fail')
+    throw new Error(err)
   }
 }
 

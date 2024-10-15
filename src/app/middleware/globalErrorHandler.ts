@@ -10,6 +10,7 @@ import { TErrorSources } from '../interface/error'
 import validationErrorHandler from '../errors/validationErrorHandler'
 import castErrorHandler from '../errors/castErrorHandler'
 import duplicateErrorHandler from '../errors/duplicateErrorHandler'
+import AppError from '../errors/appError'
 
 const globalErrorHandler: ErrorRequestHandler = (
   error,
@@ -47,6 +48,23 @@ const globalErrorHandler: ErrorRequestHandler = (
     statusCode = simplifiedError.statusCode
     message = simplifiedError.message
     errorSources = simplifiedError.errorSources
+  } else if (error instanceof AppError) {
+    statusCode = error.statusCode
+    message = error.message
+    errorSources = [
+      {
+        path: '',
+        message: error.message,
+      },
+    ]
+  } else if (error instanceof Error) {
+    message = error.message
+    errorSources = [
+      {
+        path: '',
+        message: error.message,
+      },
+    ]
   }
 
   res.status(statusCode).json({
