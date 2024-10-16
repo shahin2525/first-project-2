@@ -19,6 +19,7 @@ async function main() {
 main()
 
 process.on('unhandledRejection', () => {
+  console.log('un handle rejection error')
   if (server) {
     server.close(() => {
       process.exit(1)
