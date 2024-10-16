@@ -18,8 +18,8 @@ const globalErrorHandler: ErrorRequestHandler = (
   res,
   next: NextFunction,
 ) => {
-  let statusCode = error.statusCode || 500
-  let message = error.message || 'something went wrong'
+  let statusCode = 500
+  let message = 'something went wrong'
 
   let errorSources: TErrorSources = [
     {
