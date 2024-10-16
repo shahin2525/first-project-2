@@ -26,3 +26,8 @@ process.on('unhandledRejection', () => {
   }
   process.exit(1)
 })
+
+process.on('uncaughtException', () => {
+  console.log('uncaught exception track')
+  process.exit(1)
+})

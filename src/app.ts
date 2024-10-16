@@ -14,7 +14,6 @@ app.use('/api/v1/', router)
 // app.use('/api/v1/users/', UserRouter)
 
 app.get('/', (req: Request, res: Response) => {
-  Promise.reject()
   const a = 4
   res.send(a)
 })
