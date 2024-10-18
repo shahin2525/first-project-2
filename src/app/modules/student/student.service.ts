@@ -32,11 +32,10 @@ const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
       [field]: { $regex: searchTerm, $options: 'i' },
     })),
   })
+  //filter
   const queryObj = { ...query }
   const excludesQuery = ['searchTerm', 'sort', 'limit', 'page', 'fields']
   excludesQuery.forEach((el) => delete queryObj[el])
-
-  console.log(query, queryObj)
 
   const filterQuery = searchQuery
     .find(queryObj)
