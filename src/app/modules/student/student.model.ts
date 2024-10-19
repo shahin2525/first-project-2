@@ -1,32 +1,17 @@
 import { model, Schema } from 'mongoose'
 import { StudentModel, TStudent } from './student.interface'
 
-// import bcrypt from 'bcrypt'
-// import config from '../../config'
-// Define the UserName schema
 const userNameSchema = new Schema({
   firstName: {
     type: String,
     required: [true, 'First name is required'],
     trim: true,
     maxlength: [20, 'Must be max length 20, character'],
-    // validate: {
-    //   validator: function (value) {
-    //     const firstNameStr = value.charAt(0).toUpperCase() + value.slice(1)
-    //     return firstNameStr === value
-    //   },
-    //   message: '{VALUE} is not in capitalize format',
-    // },
   },
   middleName: { type: String, trim: true },
   lastName: {
     type: String,
     required: [true, 'last name is required'],
-
-    // validate: {
-    //   validator: (value: string) => validator.isAlpha(value),
-    //   message: 'value is not valid',
-    // },
   },
 })
 
@@ -68,10 +53,6 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       required: [true, 'email is required'],
 
       unique: true,
-      // validate: {
-      //   validator: (value) => validator.isEmail(value),
-      //   message: '{VALUE} is not valid email',
-      // },
     },
     gender: {
       type: String,
