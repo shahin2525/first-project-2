@@ -1,4 +1,4 @@
-import { Types } from 'mongoose'
+import { Model, Types } from 'mongoose'
 
 //
 export type TFacultyName = {
@@ -16,19 +16,7 @@ export type TBloodGroup =
   | 'AB-'
   | 'O+'
   | 'O-'
-// export type TFacultyGuardian = {
-//   fatherName: string
-//   fatherContact: string
-//   fatherOccupation: string
-//   motherName: string
-//   motherContact: string
-//   motherOccupation: string
-// }
-// export type TFacultyLocalGuardian = {
-//   name: string
-//   contact: string
-//   occupation: string
-// }
+
 export type TFaculty = {
   id: string
   user: Types.ObjectId
@@ -36,7 +24,7 @@ export type TFaculty = {
   name: TFacultyName
   email: string
   gender: TGender
-  dateOfBirth?: string
+  dateOfBirth?: Date
   contactNumber: string
   emergencyContact: string
 
@@ -48,4 +36,11 @@ export type TFaculty = {
   academicDepartment: Types.ObjectId
 
   isDeleted: boolean
+}
+
+export interface FacultyModel extends Model<TFaculty> {
+  // eslint-disable-next-line no-unused-vars
+  isUserExists(id: string): Promise<TFaculty | null>
+  // eslint-disable-next-line no-unused-vars
+  userDoesNotExists(id: string): Promise<TFaculty | null>
 }
