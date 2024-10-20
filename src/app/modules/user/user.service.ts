@@ -6,9 +6,12 @@ import { TStudent } from '../student/student.interface'
 import { Student } from '../student/student.model'
 import { TUser } from './user.interface'
 import User from './user.model'
-import { generateStudentId } from './user.utils'
+import { generateFacultyId, generateStudentId } from './user.utils'
 import AppError from '../../errors/appError'
 import httpStatus from 'http-status'
+import { TFaculty } from '../faculty/faculty.interface'
+import AcademicDepartment from '../academicDepartment/academicDepartment.model'
+import Faculty from '../faculty/faculty.model'
 
 const createUserIntoDB = async (password: string, payload: TStudent) => {
   const userData: Partial<TUser> = {}
@@ -53,6 +56,56 @@ const createUserIntoDB = async (password: string, payload: TStudent) => {
     throw new Error(err)
   }
 }
+// create faculty
+
+const createFacultyIntoDB = async (password: string, payload: TFaculty) => {
+  const userData: Partial<TUser> = {}
+  userData.password = password || config.default_password
+  userData.role = 'faculty'
+
+  // get academicDepartment
+  const academicDepartment = await AcademicDepartment.findById(
+    payload.academicDepartment,
+  )
+  if (!academicDepartment) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      'academic department is not found',
+    )
+  }
+  const session = await mongoose.startSession()
+  try {
+    session.startTransaction()
+    userData.id = await generateFacultyId()
+
+    // create new user
+
+    const newUser = await User.create([userData], { session })
+
+    if (!newUser.length) {
+      throw new AppError(httpStatus.BAD_REQUEST, 'failed to create user')
+    }
+
+    payload.id = newUser[0].id
+    payload.user = newUser[0]._id
+
+    // create faculty
+    const createFaculty = await Faculty.create([payload], { session })
+
+    if (!createFaculty.length) {
+      throw new AppError(httpStatus.BAD_REQUEST, 'failed to create faculty')
+    }
+    await session.commitTransaction()
+    await session.endSession()
+
+    return createFaculty
+  } catch (error: any) {
+    session.abortTransaction()
+    session.endSession()
+    throw new Error(error)
+  }
+}
 export const UserServices = {
   createUserIntoDB,
+  createFacultyIntoDB,
 }
