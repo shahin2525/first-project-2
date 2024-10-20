@@ -32,7 +32,7 @@ const createFacultyValidationSchema = z.object({
         .email('Invalid email address')
         .nonempty('email number is required'),
       gender: GenderSchema,
-      dateOfBirth: z.coerce.date().optional(), // Coerce any date-like value into a JS Date object
+      dateOfBirth: z.string().optional(), // Coerce any date-like value into a JS Date object
       contactNumber: z.string().nonempty('Contact number is required'),
       emergencyContact: z.string().nonempty('Emergency contact is required'),
       presentAddress: z.string().nonempty('Present address is required'),
