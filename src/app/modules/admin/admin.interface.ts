@@ -37,7 +37,7 @@ export type TAdmin = {
   isDeleted: boolean
 }
 
-export interface FacultyModel extends Model<TAdmin> {
+export interface AdminModel extends Model<TAdmin> {
   // eslint-disable-next-line no-unused-vars
   isUserExists(id: string): Promise<TAdmin | null>
   // eslint-disable-next-line no-unused-vars
