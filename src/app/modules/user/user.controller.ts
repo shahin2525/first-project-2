@@ -3,6 +3,7 @@ import httpStatus from 'http-status'
 import catchAsync from '../../utils/catchAsync'
 import sendResponse from '../../utils/sendResponse'
 import { UserServices } from './user.service'
+import Admin from '../admin/admin.model'
 
 const createUser: RequestHandler = catchAsync(async (req, res) => {
   const { password, student: studentData } = req.body
@@ -30,7 +31,20 @@ const createFaculty: RequestHandler = catchAsync(async (req, res) => {
 
   return result
 })
+
+const createAdmin: RequestHandler = catchAsync(async (req, res) => {
+  const { password, admin } = req.body
+
+  const result = await UserServices.createAdminIntoDB(password, admin)
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'admin created successfully',
+    data: result,
+  })
+})
 export const UserControllers = {
   createUser,
   createFaculty,
+  createAdmin,
 }
