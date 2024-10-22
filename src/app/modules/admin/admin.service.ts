@@ -81,7 +81,7 @@ const deleteAdminIntoDB = async (id: string) => {
     throw new Error(error)
   }
 }
-export const FacultyServices = {
+export const AdminServices = {
   getAllAdminIntoDB,
   getSingleAdminIntoDB,
   updateAdminIntoDB,
