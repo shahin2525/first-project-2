@@ -12,6 +12,7 @@ import httpStatus from 'http-status'
 import { TFaculty } from '../faculty/faculty.interface'
 import AcademicDepartment from '../academicDepartment/academicDepartment.model'
 import Faculty from '../faculty/faculty.model'
+import { TAdmin } from '../admin/admin.interface'
 
 const createUserIntoDB = async (password: string, payload: TStudent) => {
   const userData: Partial<TUser> = {}
@@ -105,7 +106,22 @@ const createFacultyIntoDB = async (password: string, payload: TFaculty) => {
     throw new Error(error)
   }
 }
+
+const createAdminIntoDB = async (password: string, payload: TAdmin) => {
+  const userData: Partial<TUser> = {}
+
+  userData.role = 'admin'
+  userData.password = password || config.default_password
+
+  const session = await mongoose.startSession()
+  try {
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
 export const UserServices = {
   createUserIntoDB,
   createFacultyIntoDB,
+  createAdminIntoDB,
 }
