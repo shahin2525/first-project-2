@@ -43,6 +43,7 @@ const updateAdminIntoDB = async (id: string, payload: TFaculty) => {
 
   const result = await Admin.findByIdAndUpdate(id, updateModifiedAdmin, {
     new: true,
+    runValidators: true,
   })
   return result
 }

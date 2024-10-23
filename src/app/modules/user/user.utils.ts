@@ -101,6 +101,6 @@ export const generateAdminId = async () => {
   }
 
   let incrementId = (Number(currentId) + 1).toString().padStart(4, '0')
-  incrementId = `F-${incrementId}`
+  incrementId = `A-${incrementId}`
   return incrementId
 }

@@ -102,7 +102,7 @@ const getSingleStudentFromDB = async (id: string) => {
   if (await Student.doesUserExists(id)) {
     throw new AppError(httpStatus.NOT_FOUND, 'user does not exists')
   }
-  const result = await Student.findOne({ id })
+  const result = await Student.findById(id)
     .populate('admissionSemester')
     .populate({
       path: 'academicDepartment',
@@ -137,7 +137,7 @@ const updateStudentFromDB = async (id: string, payload: Partial<TStudent>) => {
     }
   }
 
-  const result = await Student.findOneAndUpdate({ id }, modifiedData, {
+  const result = await Student.findByIdAndUpdate({ id }, modifiedData, {
     new: true,
     runValidators: true,
   })
@@ -154,8 +154,8 @@ const deleteSingleStudentFromDB = async (id: string) => {
     session.startTransaction()
 
     // first transaction
-    const studentDelete = await Student.findOneAndUpdate(
-      { id },
+    const studentDelete = await Student.findByIdAndUpdate(
+      id,
       { isDeleted: true },
       { new: true, session },
     )
@@ -164,9 +164,10 @@ const deleteSingleStudentFromDB = async (id: string) => {
     }
 
     // second transaction
+    const studentId = studentDelete.user
 
-    const userDelete = await User.findOneAndUpdate(
-      { id },
+    const userDelete = await User.findByIdAndUpdate(
+      studentId,
       { isDeleted: true },
       { new: true, session },
     )
