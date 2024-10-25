@@ -10,4 +10,5 @@ export type TCourse = {
   code: number
   credits: number
   preRequisiteCourse: []
+  isDeleted: boolean
 }
