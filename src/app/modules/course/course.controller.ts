@@ -5,7 +5,7 @@ import { CourseServices } from './course.service'
 import catchAsync from '../../utils/catchAsync'
 
 const createCourse: RequestHandler = catchAsync(async (req, res) => {
-  const { data } = req.body
+  const data = req.body
   const result = await CourseServices.createCourseIntoDB(data)
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -34,9 +34,32 @@ const getSingleCourse: RequestHandler = catchAsync(async (req, res) => {
     data: result,
   })
 })
+const updateCourse: RequestHandler = catchAsync(async (req, res) => {
+  const { id } = req.params
+  const { data } = req.body
+  const result = await CourseServices.updateCourseIntoDB(id, data)
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'update  course successfully',
+    data: result,
+  })
+})
+const deleteCourse: RequestHandler = catchAsync(async (req, res) => {
+  const { id } = req.params
+  const result = await CourseServices.deleteCourseIntoDB(id)
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'delete course successfully',
+    data: result,
+  })
+})
 
 export const courseController = {
   createCourse,
   getAllCourse,
   getSingleCourse,
+  updateCourse,
+  deleteCourse,
 }
