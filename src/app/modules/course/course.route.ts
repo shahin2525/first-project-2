@@ -12,6 +12,11 @@ router.post(
 )
 router.get('/', courseController.getAllCourse)
 router.get('/:id', courseController.getSingleCourse)
+router.patch(
+  '/:id',
+  validRequest(CourseValidations.updateCourseValidationSchema),
+  courseController.updateCourse,
+)
 router.delete('/:id', courseController.deleteCourse)
 
 export const CourseRoutes = router

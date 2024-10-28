@@ -20,12 +20,12 @@ const createCourseValidationSchema = z.object({
 
 // Zod validation schema for TPreRequisiteCourses with optional fields
 const UpdatePreRequisiteCoursesSchema = z.object({
-  course: z.string().optional(), // ObjectId as string, made optional
+  course: z.string(), // ObjectId as string, made optional
   isDeleted: z.boolean().optional(), // Optional boolean
 })
 
 // Zod validation schema for TCourse with all fields optional
-const UpdateCourseValidationSchema = z.object({
+const updateCourseValidationSchema = z.object({
   body: z.object({
     title: z.string().optional(), // Optional string
     prefix: z.string().optional(), // Optional string
@@ -38,5 +38,5 @@ const UpdateCourseValidationSchema = z.object({
 
 export const CourseValidations = {
   createCourseValidationSchema,
-  UpdateCourseValidationSchema,
+  updateCourseValidationSchema,
 }
