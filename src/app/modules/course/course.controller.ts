@@ -56,10 +56,23 @@ const deleteCourse: RequestHandler = catchAsync(async (req, res) => {
   })
 })
 
+// facultyWithCourse
+const createFacultyWithCourse: RequestHandler = catchAsync(async (req, res) => {
+  const { courseId } = req.params
+  const data = req.body
+  const result = await CourseServices.updateCourseIntoDB(courseId, data)
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'create faculty with  course successfully',
+    data: result,
+  })
+})
 export const courseController = {
   createCourse,
   getAllCourse,
   getSingleCourse,
   updateCourse,
   deleteCourse,
+  createFacultyWithCourse,
 }

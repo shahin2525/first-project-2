@@ -1,8 +1,8 @@
 import mongoose from 'mongoose'
 import QueryBuilder from '../../builder/QueryBuilder'
 import { CourseSearchableFields } from './course.constants'
-import { TCourse } from './course.interface'
-import Course from './course.model'
+import { TCourse, TCourseFaculty } from './course.interface'
+import { Course, CourseFaculty } from './course.model'
 import httpStatus from 'http-status'
 import AppError from '../../errors/appError'
 
@@ -35,7 +35,7 @@ const updateCourseIntoDB = async (id: string, payload: Partial<TCourse>) => {
   const session = await mongoose.startSession()
 
   try {
-    session.startTransaction()
+    await session.startTransaction()
 
     // updateBasicCourseInfo
     const updateBasicCourse = await Course.findByIdAndUpdate(
@@ -105,16 +105,16 @@ const updateCourseIntoDB = async (id: string, payload: Partial<TCourse>) => {
 
     //
 
-    session.commitTransaction()
-    session.endSession()
+    await session.commitTransaction()
+    await session.endSession()
     const result = await Course.findById(id).populate(
       'preRequisiteCourse.course',
     )
     return result
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
-    session.abortTransaction()
-    session.endSession()
+    await session.abortTransaction()
+    await session.endSession()
     throw new Error(err)
   }
 }
@@ -130,10 +130,21 @@ const deleteCourseIntoDB = async (id: string) => {
   )
   return result
 }
+
+const createFacultyWithCourseIntoDB = async (
+  id: string,
+  payload: Partial<TCourseFaculty>,
+) => {
+  const result = await CourseFaculty.findByIdAndUpdate(id, {
+    $addToSet: { faculties: { $each: payload } },
+  })
+  return result
+}
 export const CourseServices = {
   createCourseIntoDB,
   getAllCourseIntoDB,
   getSingleCourseIntoDB,
   updateCourseIntoDB,
   deleteCourseIntoDB,
+  createFacultyWithCourseIntoDB,
 }
