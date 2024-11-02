@@ -22,9 +22,9 @@ const BloodGroupSchema = z.enum(
 
 const createFacultyValidationSchema = z.object({
   body: z.object({
-    password: z.string().max(20),
+    // password: z.string().max(20),
     faculty: z.object({
-      id: z.string().nonempty('ID is required'),
+      // id: z.string().nonempty('ID is required'),
 
       name: FacultyNameSchema,
       email: z
